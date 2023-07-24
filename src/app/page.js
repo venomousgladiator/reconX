@@ -1,64 +1,68 @@
 'use client'
-
 import Image from "next/image";
 import { useState } from "react";
+import axios from "axios"
 //localhost
 export default function Home() {
   
   const [data, setData] = useState('')
-  const [domain, setWhoIs] = useState('')
-  const [ipAddress, setIpAddress] = useState('')
+  const [dnsData, setDNSData] = useState('')
+  const [sData, setSData] = useState('')
   
-/* const callIPAPI = async (ipAddress) => {
+  const [domain, setWhoIs] = useState('')
+  
+  const [ipAddress, setIpAddress] = useState('')
+  const [ipAddress2, setIpAddress2] = useState('')
+  
+const callIPAPI = async () => {
     try {
-      const res = await fetch(
-        `https://api.ipgeolocation.io/getip${ipAddress}`,
-        {
-          method: "GET",
-          redirect: "follow",
-          headers: { apikey: "3780fd1ec4f84724a33db4438e3a2097" },
-        }
-      );
-      const apiData = await res.json();
-      console.log(ipAddress);
-      setData(ipAddress)
-      console.log(ipAddress)
-      return apiData;
+
+      const res = await axios.get(`http://ip-api.com/json/${ipAddress}`, {
+        headers:{ 'Content-Type': "application/json" }
+      })
+      console.log(res.data);
+      setData(res.data)
     } catch (err) {
       console.log(err);
     }
-  };*/
+  };
 
-  /*const callDNSAPI = async () => {
+  const callDNSAPI = async () => {
     try {
-      const res = await fetch(
-        `https://api.apilayer.com/whois/query?domain=${domain}`,
-        {
-          method: "GET",
-          redirect: "follow",
-          headers: { apikey: "5MgKoU8sDEfs1bIGOVj4FSdcAASuzQIr" },
-        }
-      );
-      const apiData = await res.json();
-      setData(apiData)
-      console.log(data);
+      // const res = await fetch(
+      //   `https://api.apilayer.com/whois/query?domain=${domain}`,
+      //   {
+      //     method: "GET",
+      //     redirect: "follow",
+      //     headers: { apikey: "5MgKoU8sDEfs1bIGOVj4FSdcAASuzQIr",'Content-Type': "application/json" },
+      //   }
+      // );
+      const res = await axios.get(`https://api.api-ninjas.com/v1/whois?domain=${domain}`, {
+        headers:{  'X-Api-Key': "eIiQsW9DwQ8qFjm4GsqDJw==YYIJ3iyKpZJshCS0",'Content-Type': "application/json" }
+      })
+      setDNSData(res.data)
+      console.log(res.data);
     } catch (err) {
       console.log(err);
     }
-  };*/
+  };
 
 
-  const SHODANAPI = async (ipAddress) => {
+  const SHODANAPI = async () => {
     try {
-      const res = await fetch(`https://api.shodan.io=${ipAddress}`, {
-        method: "GET",
-        redirect: "follow",
-        headers: {
-          apikey: "5lildZw4j7Dl5gr1zk9QioWfmlJovQ7v",
-        },
-      });
-      const data = await res.json();
-      console.log(data);
+      // const res = await fetch(`https://api.shodan.io/shodan/host/${ipAddress2}`, {
+      //   method: "GET",
+      //   redirect: "follow",
+      //   headers: {
+      //     apikey: "5lildZw4j7Dl5gr1zk9QioWfmlJovQ7v",
+      //     'Content-Type': "application/json"
+      //   },
+      // });
+      const res = await axios.get(`https://api.shodan.io/shodan/host/${ipAddress2}?key=5lildZw4j7Dl5gr1zk9QioWfmlJovQ7v`, {
+        headers:{'Content-Type': "application/json" }
+      })
+      console.log(res.data);
+      setSData(res.data)
     } catch (err) {
       console.log(err);
     }
@@ -87,8 +91,14 @@ export default function Home() {
             method="post"
             onChange={(e) => setWhoIs(e.target.value)}
           />{" "}
-          <button className="bg-blue-400 p-2 rounded"
-          onClick={()=>{callDNSAPI()}}>Whois-Lookup</button>
+          <button
+            className="bg-blue-400 p-2 rounded"
+            onClick={() => {
+              callDNSAPI();
+            }}
+          >
+            Whois-Lookup
+          </button>
         </div>
         <div>
           <input
@@ -98,9 +108,14 @@ export default function Home() {
             placeholder="192.168.0.1"
             className=" m-3 p-2 outline rounded mt-4"
             method="post"
-            onChange={(e)=> callIPAPI(e.target.value)}
+            onChange={(e) => setIpAddress(e.target.value)}
           />{" "}
-          <button className="bg-blue-400 p-2 rounded" onClick={()=>{callIPAPI()}}>
+          <button
+            className="bg-blue-400 p-2 rounded"
+            onClick={() => {
+              callIPAPI();
+            }}
+          >
             Geolocation Search
           </button>
         </div>
@@ -113,18 +128,24 @@ export default function Home() {
             placeholder="192.168.0.1"
             className=" m-3 p-2 outline rounded"
             method="post"
-            onChange={(e)=> SHODANAPI(e.target.value)}
+            onChange={(e) => setIpAddress2(e.target.value)}
           />{" "}
-          <button className="bg-blue-400 p-2 rounded" type="Submit"  onClick={()=>{SHODANAPI()}}>
+          <button
+            className="bg-blue-400 p-2 rounded"
+            type="Submit"
+            onClick={() => {
+              SHODANAPI();
+            }}
+          >
             {" "}
             Shodan Search
           </button>
         </div>
       </div>
-      <div className="flex flex-col">
-        <h1>{data.city}</h1>
-        <h1>{data.lat}</h1>
-        <h1>{data.lon}</h1>
+      <div className="flex flex-col w-screen">
+        <pre className="bg-black/75 text-green-500 rounded-xl mt-4">{JSON.stringify(data, 0, 2)}</pre>
+        <pre className="bg-black/75 text-green-500 rounded-xl mt-4">{JSON.stringify(dnsData, 0, 2)}</pre>
+        <pre className="bg-black/75 text-green-500 rounded-xl mt-4 whitespace-normal overflow-scroll">{JSON.stringify(sData, 0, 2)}</pre>
       </div>
     </div>
   );
