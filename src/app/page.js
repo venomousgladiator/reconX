@@ -35,16 +35,10 @@ export default function Home() {
       //     headers: { apikey: "5MgKoU8sDEfs1bIGOVj4FSdcAASuzQIr",'Content-Type': "application/json" },
       //   }
       // );
-      const res = await axios.get(
-        `https://api.api-ninjas.com/v1/whois?domain=${domain}`,
-        {
-          headers: {
-            "X-Api-Key": "eIiQsW9DwQ8qFjm4GsqDJw==YYIJ3iyKpZJshCS0",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setDNSData(res.data);
+      const res = await axios.get(`https://api.api-ninjas.com/v1/whois?domain=${domain}`, {
+        headers:{  'X-Api-Key': "",'Content-Type': "application/json" }
+      })
+      setDNSData(res.data)
       console.log(res.data);
     } catch (err) {
       console.log(err);
