@@ -1,27 +1,25 @@
-'use client'
+"use client";
 import Image from "next/image";
 import { useState } from "react";
-import axios from "axios"
+import axios from "axios";
 //localhost
 export default function Home() {
-  
-  const [data, setData] = useState('')
-  const [dnsData, setDNSData] = useState('')
-  const [sData, setSData] = useState('')
-  
-  const [domain, setWhoIs] = useState('')
-  
-  const [ipAddress, setIpAddress] = useState('')
-  const [ipAddress2, setIpAddress2] = useState('')
-  
-const callIPAPI = async () => {
-    try {
+  const [data, setData] = useState("");
+  const [dnsData, setDNSData] = useState("");
+  const [sData, setSData] = useState("");
 
+  const [domain, setWhoIs] = useState("");
+
+  const [ipAddress, setIpAddress] = useState("");
+  const [ipAddress2, setIpAddress2] = useState("");
+
+  const callIPAPI = async () => {
+    try {
       const res = await axios.get(`http://ip-api.com/json/${ipAddress}`, {
-        headers:{ 'Content-Type': "application/json" }
-      })
+        headers: { "Content-Type": "application/json" },
+      });
       console.log(res.data);
-      setData(res.data)
+      setData(res.data);
     } catch (err) {
       console.log(err);
     }
@@ -37,37 +35,36 @@ const callIPAPI = async () => {
       //     headers: { apikey: "5MgKoU8sDEfs1bIGOVj4FSdcAASuzQIr",'Content-Type': "application/json" },
       //   }
       // );
-      const res = await axios.get(`https://api.api-ninjas.com/v1/whois?domain=${domain}`, {
-        headers:{  'X-Api-Key': "eIiQsW9DwQ8qFjm4GsqDJw==YYIJ3iyKpZJshCS0",'Content-Type': "application/json" }
-      })
-      setDNSData(res.data)
+      const res = await axios.get(
+        `https://api.api-ninjas.com/v1/whois?domain=${domain}`,
+        {
+          headers: {
+            "X-Api-Key": "eIiQsW9DwQ8qFjm4GsqDJw==YYIJ3iyKpZJshCS0",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setDNSData(res.data);
       console.log(res.data);
     } catch (err) {
       console.log(err);
     }
   };
-
 
   const SHODANAPI = async () => {
     try {
-      // const res = await fetch(`https://api.shodan.io/shodan/host/${ipAddress2}`, {
-      //   method: "GET",
-      //   redirect: "follow",
-      //   headers: {
-      //     apikey: "5lildZw4j7Dl5gr1zk9QioWfmlJovQ7v",
-      //     'Content-Type': "application/json"
-      //   },
-      // });
-      const res = await axios.get(`https://api.shodan.io/shodan/host/${ipAddress2}?key=5lildZw4j7Dl5gr1zk9QioWfmlJovQ7v`, {
-        headers:{'Content-Type': "application/json" }
-      })
+      const res = await axios.get(
+        `https://api.shodan.io/shodan/host/${ipAddress2}?key=5lildZw4j7Dl5gr1zk9QioWfmlJovQ7v`,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       console.log(res.data);
-      setSData(res.data)
+      setSData(res.data);
     } catch (err) {
       console.log(err);
     }
   };
-  
 
   return (
     <div className="bg-mainbg h-screen w-screen bg-cover flex items-center flex-col p-10">
@@ -143,9 +140,129 @@ const callIPAPI = async () => {
         </div>
       </div>
       <div className="flex flex-col w-screen">
-        <pre className="bg-black/75 text-green-500 rounded-xl mt-4">{JSON.stringify(data, 0, 2)}</pre>
-        <pre className="bg-black/75 text-green-500 rounded-xl mt-4">{JSON.stringify(dnsData, 0, 2)}</pre>
-        <pre className="bg-black/75 text-green-500 rounded-xl mt-4 whitespace-normal overflow-scroll">{JSON.stringify(sData, 0, 2)}</pre>
+        {data && (
+          <div className="bg-white/75 text-gray-900 rounded-xl m-6 border p-6">
+            <h1 className="text-2xl bold text-black">Geolocation Info</h1>
+            {/* {JSON.stringify(data, 0, 2)} */}
+            <h1 className="text-xl bold text-gray-900">
+              <span>Status: {data.status}</span>
+            </h1>
+            <h2 className="text-xl bold text-gray-900">
+              <span>Region: {data.country}</span>,&nbsp;
+              <span>{data.regionName}</span>,&nbsp;<span>{data.city}</span>
+              ,&nbsp;<span>{data.zip}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>Coordinates: ({data.lat}</span>,&nbsp;
+              <span>{data.lon}</span>)
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>ISP: {data.isp}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>ORG: {data.org}</span>
+            </h2>
+          </div>
+        )}
+        {dnsData && (
+          <div className="bg-white/75 text-gray-900 rounded-xl m-6 border p-6">
+            <h1 className="text-2xl bold text-black">WHOIS Info</h1>
+            <h1 className="text-xl bold text-gray-900">
+              <span>Registrar: {dnsData.registrar}</span>
+            </h1>
+            <h2 className="text-xl bold text-gray-900">
+              <span>WHOIS Server: {dnsData["whois_server"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>
+                Last Update: {new Date(dnsData["updated_date"]).toString()}
+              </span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>
+                Creation Date: {new Date(dnsData["creation_date"]).toString()}
+              </span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>
+                Expiration Date:{" "}
+                {new Date(dnsData["expiration_date"]).toString()}
+              </span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>DNS SEC: {dnsData.dnssec}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>Organization: {dnsData.org}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>State: {dnsData.state}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>Country: {dnsData.country}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>Servers: {dnsData["name_servers"].join(", ")}</span>
+            </h2>
+            {dnsData["emails"] && (
+              <h2 className="text-xl bold text-gray-900">
+                <span>
+                  Emails:{" "}
+                  {Array.isArray(dnsData["emails"])
+                    ? dnsData["emails"].join(", ")
+                    : dnsData["emails"]}
+                </span>
+              </h2>
+            )}
+          </div>
+        )}
+        {sData && (
+          <div className="bg-white/75 text-gray-900 rounded-xl m-6 border p-6">
+            <h1 className="text-2xl bold text-black">Shodan Info</h1>
+            <h2 className="text-xl bold text-gray-900">
+              <span>Region Code: {sData["region_code"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>IP: {sData["ip"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>Postal Code: {sData["postal_code"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>Country Code: {sData["country_code"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>City: {sData["city"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>
+                Coordinates: ({sData["latitude"]}, {sData["longitude"]})
+              </span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>ASN: {sData["asn"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>ISP: {sData["isp"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span> Transport Protocol: {sData["transport"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>Ip Str: {sData["ip_str"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>Domains: {sData["domains"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>OS: {sData["os"]}</span>
+            </h2>
+            <h2 className="text-xl bold text-gray-900">
+              <span>Open Ports: {sData["ports"].join(", ")}</span>
+            </h2>
+          </div>
+        )}
+        {/* <div dangerouslySetInnerHTML={{__html:sData.data}}></div> */}
       </div>
     </div>
   );
