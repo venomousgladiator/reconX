@@ -2,17 +2,15 @@
 import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
-//localhost
-export default function Home() {
+import Link from 'next/link';
+export default function Home() 
+{
   const [data, setData] = useState("");
   const [dnsData, setDNSData] = useState("");
   const [sData, setSData] = useState("");
-
   const [domain, setWhoIs] = useState("");
-
   const [ipAddress, setIpAddress] = useState("");
   const [ipAddress2, setIpAddress2] = useState("");
-
   const callIPAPI = async () => {
     try {
       const res = await axios.get(`http://ip-api.com/json/${ipAddress}`, {
@@ -24,19 +22,10 @@ export default function Home() {
       console.log(err);
     }
   };
-
   const callDNSAPI = async () => {
     try {
-      // const res = await fetch(
-      //   `https://api.apilayer.com/whois/query?domain=${domain}`,
-      //   {
-      //     method: "GET",
-      //     redirect: "follow",
-      //     headers: { apikey: "5MgKoU8sDEfs1bIGOVj4FSdcAASuzQIr",'Content-Type': "application/json" },
-      //   }
-      // );
       const res = await axios.get(`https://api.api-ninjas.com/v1/whois?domain=${domain}`, {
-        headers:{  'X-Api-Key': "",'Content-Type': "application/json" }
+        headers:{  'X-Api-Key': "eIiQsW9DwQ8qFjm4GsqDJw==YYIJ3iyKpZJshCS0",'Content-Type': "application/json" }
       })
       setDNSData(res.data)
       console.log(res.data);
@@ -44,7 +33,6 @@ export default function Home() {
       console.log(err);
     }
   };
-
   const SHODANAPI = async () => {
     try {
       const res = await axios.get(
@@ -59,17 +47,20 @@ export default function Home() {
       console.log(err);
     }
   };
-
   return (
     <div className="bg-mainbg h-screen w-screen bg-cover flex items-center flex-col p-10">
       <h1 className="text-6xl text-center font-semibold font-[Arial]">
         Recon DNS & IP{" "}
       </h1>
-      <header>
+      <div>
         {" "}
-        Handy tool for quick Shodan Reconissance , IP Geolocation and whois
-        protocol Lookup{" "}
-      </header>
+        <big>Handy tool for quick Shodan Reconissance , IP Geolocation and whois
+        protocol Lookup.</big>{" "}
+      </div>
+      <div>
+        <br/>
+        <Image src="/logo.jpg" width="270" height="250"/>
+      </div> 
       <div className=" rounded-[8px] p-10 mt-9">
         <div>
           {" "}
@@ -83,7 +74,7 @@ export default function Home() {
             onChange={(e) => setWhoIs(e.target.value)}
           />{" "}
           <button
-            className="bg-blue-400 p-2 rounded"
+            className="bg-green-600 p-2 rounded"
             onClick={() => {
               callDNSAPI();
             }}
@@ -102,7 +93,7 @@ export default function Home() {
             onChange={(e) => setIpAddress(e.target.value)}
           />{" "}
           <button
-            className="bg-blue-400 p-2 rounded"
+            className="bg-green-600 p-2 rounded"
             onClick={() => {
               callIPAPI();
             }}
@@ -122,7 +113,7 @@ export default function Home() {
             onChange={(e) => setIpAddress2(e.target.value)}
           />{" "}
           <button
-            className="bg-blue-400 p-2 rounded"
+            className="bg-green-600 p-2 rounded"
             type="Submit"
             onClick={() => {
               SHODANAPI();
@@ -137,7 +128,6 @@ export default function Home() {
         {data && (
           <div className="bg-white/75 text-gray-900 rounded-xl m-6 border p-6">
             <h1 className="text-2xl bold text-black">Geolocation Info</h1>
-            {/* {JSON.stringify(data, 0, 2)} */}
             <h1 className="text-xl bold text-gray-900">
               <span>Status: {data.status}</span>
             </h1>
@@ -204,7 +194,8 @@ export default function Home() {
                   Emails:{" "}
                   {Array.isArray(dnsData["emails"])
                     ? dnsData["emails"].join(", ")
-                    : dnsData["emails"]}
+                    : dnsData["emails"]
+                  }
                 </span>
               </h2>
             )}
@@ -256,7 +247,11 @@ export default function Home() {
             </h2>
           </div>
         )}
-        {/* <div dangerouslySetInnerHTML={{__html:sData.data}}></div> */}
+      </div>
+      <div>
+<button className="bg-green-600 p-2 rounded"> <center><Link href="/Collaborators">Developer's Corner</Link>&nbsp;&nbsp;</center></button>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<button className="bg-green-600 p-2 rounded"> <center><Link href='/HowitWorks'>How It Works</Link> &nbsp;&nbsp;</center></button>
       </div>
     </div>
   );

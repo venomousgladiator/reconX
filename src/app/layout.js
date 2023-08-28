@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata = {
   title: "DNS Info Tool",
   description:
-    "Handy tool for quick Shodan Reconissance , IP Geolocation and whois protocol Lookup",
+    "Handy tool for quick Shodan Reconissance , IP Geolocation and Whois Lookup",
 };
 
 export default function RootLayout({ children }) {
