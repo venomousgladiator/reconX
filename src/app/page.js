@@ -25,7 +25,7 @@ export default function Home()
   const callDNSAPI = async () => {
     try {
       const res = await axios.get(`https://api.api-ninjas.com/v1/whois?domain=${domain}`, {
-        headers:{  'X-Api-Key': "eIiQsW9DwQ8qFjm4GsqDJw==YYIJ3iyKpZJshCS0",'Content-Type': "application/json" }
+        headers:{  'X-Api-Key': "Key-Here",'Content-Type': "application/json" }
       })
       setDNSData(res.data)
       console.log(res.data);
@@ -36,7 +36,7 @@ export default function Home()
   const SHODANAPI = async () => {
     try {
       const res = await axios.get(
-        `https://api.shodan.io/shodan/host/${ipAddress2}?key=5lildZw4j7Dl5gr1zk9QioWfmlJovQ7v`,
+        `https://api.shodan.io/shodan/host/${ipAddress2}?key=Key Here`,
         {
           headers: { "Content-Type": "application/json" },
         }
